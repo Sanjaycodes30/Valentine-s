@@ -5,36 +5,49 @@ const screen2 = document.getElementById("screen2");
 const secretMsg = document.getElementById("secretMsg");
 const heartsContainer = document.querySelector(".hearts");
 
-// move "No" button (desktop + mobile)
+// Move "No" button anywhere on screen
 function moveNoButton() {
-    const x = Math.random() * 200 - 100;
-    const y = Math.random() * 80 - 40;
-    noBtn.style.transform = `translate(${x}px, ${y}px)`;
+  const padding = 20;
+
+  const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+  const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
+
+  noBtn.style.position = "fixed";
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
 }
 
 noBtn.addEventListener("mouseover", moveNoButton);
 noBtn.addEventListener("touchstart", moveNoButton);
 
-// yes click
+// Yes click → next screen + unlock secret
 yesBtn.addEventListener("click", () => {
-    screen1.classList.add("hidden");
-    screen2.classList.remove("hidden");
+  screen1.classList.add("hidden");
+  screen2.classList.remove("hidden");
 
-    // unlock secret message
-    secretMsg.classList.remove("hidden");
-    secretMsg.classList.add("show");
+  secretMsg.classList.remove("hidden");
+  secretMsg.classList.add("show");
 });
 
-// floating hearts
-function createHeart() {
-    const heart = document.createElement("span");
-    heart.innerHTML = "❤";
-    heart.style.left = Math.random() * 100 + "vw";
-    heart.style.fontSize = Math.random() * 20 + 10 + "px";
-    heart.style.animationDuration = Math.random() * 3 + 5 + "s";
-    heartsContainer.appendChild(heart);
+// Floating emojis
+const emojis = ["❤", "💖", "🦋", "🫠"];
 
-    setTimeout(() => heart.remove(), 8000);
+function createHeart() {
+  const heart = document.createElement("span");
+  heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+
+  heart.style.left = Math.random() * 100 + "vw";
+  heart.style.fontSize = Math.random() * 30 + 26 + "px";
+  heart.style.animationDuration = Math.random() * 3 + 6 + "s";
+
+  heartsContainer.appendChild(heart);
+
+  setTimeout(() => {
+    heart.remove();
+  }, 9000);
 }
 
-setInterval(createHeart, 300);
+setInterval(createHeart, 250);
